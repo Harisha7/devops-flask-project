@@ -27,11 +27,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                    docker build \
-                      -t "$IMAGE_NAME:$BUILD_NUMBER" \
-                      -t "$IMAGE_NAME:latest" .
-                '''
+                sh 'docker build -t "$IMAGE_NAME:$BUILD_NUMBER" -t "$IMAGE_NAME:latest" .'
             }
         }
 
@@ -50,8 +46,8 @@ pipeline {
                 )]) {
                     sh '''
                         echo "$DOCKERHUB_TOKEN" | docker login \
-                          --username "$DOCKERHUB_USERNAME" \
-                          --password-stdin
+                            --username "$DOCKERHUB_USERNAME" \
+                            --password-stdin
 
                         docker push "$IMAGE_NAME:$BUILD_NUMBER"
                         docker push "$IMAGE_NAME:latest"
@@ -69,28 +65,6 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed. Check Console Output.'
-        }
-    }
-}
-
-            steps {
-                sh 'docker build -t flask-devops-app:jenkins .'
-            }
-        }
-
-        stage('Verify Docker Image') {
-            steps {
-                sh 'docker images flask-devops-app'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Congratulations! Your CI pipeline completed successfully.'
-        }
-        failure {
-            echo 'The CI pipeline failed. Check the Console Output.'
         }
     }
 }
