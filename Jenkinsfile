@@ -24,6 +24,13 @@ pipeline {
                 sh 'docker --version'
             }
         }
+        
+        stage('Run Automated Tests') {
+            steps {
+                sh 'python3 -m pip install -r requirements.txt'
+                sh 'python3 -m pytest -v'
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
