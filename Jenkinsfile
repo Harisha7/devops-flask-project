@@ -27,8 +27,12 @@ pipeline {
         
         stage('Run Automated Tests') {
             steps {
-                sh 'python3 -m pip install -r requirements.txt'
-                sh 'python3 -m pytest -v'
+                sh '''
+                   python3 -m venv jenkins-venv
+                   jenkins-venv/bin/python -m pip install --upgrade pip
+                   jenkins-venv/bin/python -m pip install -r requirements.txt
+                   jenkins-venv/bin/python -m pytest -v
+                '''
             }
         }
 
